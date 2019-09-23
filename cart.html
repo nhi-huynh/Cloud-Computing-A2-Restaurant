@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>menu</title>
+		<style>
+			h1{
+				color: #1a3300;
+				text-align: center;
+				font-family: Verdana;
+				font-size: 35px;
+				text-shadow: 2px 2px #ff0000;
+				font-style: oblique;
+			}
+		
+			li {
+			  display: inline-block;
+			  color: #00004d;
+			  margin-right: 0.5%
+			  margin-left: 0.5%
+			  text-align: center;
+			  padding: 10px 30px;
+			  margin: 5px 5px;
+			  text-decoration: none;
+			  background-color: #FFFFE0;
+			  font-family: Verdana;
+			  font-size: 16px;
+			  
+			}
+			
+		</style>
+	</head>
+	<body>
+	<script >//type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuGRQ6WsQHsuilAIKXLMlFhvl9NS7qy5k&libraries=places">
+	</script>
+	
+	<script>
+	
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	var data = JSON.parse(localStorage.getItem("food"));
+	console.log(data);
+	for (var key in data) {
+					   if (data.hasOwnProperty(key)) {
+								document.getElementById('orderedMenu').innerHTML += ('<li><img src='+data[key].imageurl+' alt="food image" style="width:150px;height:140px;border:0;"></li><li><p>'
+																						+data[key].name+'</p><p>'
+																						+data[key].cost+'</p><p>'
+																						+data[key].location+'</p>'+
+																						'<button id = "CancelButton" obj_data=' +JSON.stringify(data[key]).replace(/ /g,"_")+ ' onclick="removeFunction(this);">Remove</button></li>');
+							 
+						  }
+					   }
+	});
+	
+	
+	function removeFunction(obj){
+			data = obj.getAttribute("obj_data");
+
+			data = data.replace(/_/g," ")
+
+			data = JSON.parse(data)
+			console.log(data);
+			console.log(data.name);
+			//data = obj.getAttribute("imageurl": obj.imageurl);
+			//window.localStorage.removeItem(data.name);
+
+
+	}
+			
+	
+	</script>
+	<h1>Your Cart</h1>
+	<div>
+	<p>Enter Your Delivery Address</P>
+	<form>Address <input name = "addTad">
+	</form>
+	</div>
+	
+	<div >
+	<ul id = "orderedMenu" ></ul>
+	</div>
+	</body>
+</html>

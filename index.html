@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>menu</title>
+		<style>
+			h2{
+				color: #1a3300;
+				text-align: center;
+				font-family: Verdana;
+				font-size: 50px;
+				text-shadow: 2px 2px #ff0000;
+				font-style: oblique;
+			}
+		
+			.g-signin2{
+			  background-color: #FFFFE0;
+			  font-family: Verdana;
+			  font-size: 16px;
+			  margin: auto;
+			  width: 10%;
+			  border: 1px solid;
+			  padding: 10px;
+			}
+			
+			div {
+			 
+			}
+			
+			outer-upper{
+			  display: inline-block
+			}
+			
+			button{
+			  background-color: #4CAF50;
+			  border: none;
+			  color: white;
+			  padding: 15px 32px;
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-size: 16px;
+			  font-family: Verdana;
+			  font-size: 18px;
+			}
+			
+			ul{
+			  list-style-type: none;
+			  margin: 100;
+			  padding: 10;
+			  overflow: hidden;
+			}
+
+			li {
+			  float: left;
+			  display: block; 
+			}
+				
+			ul > li {
+			  display: inline-block;
+			  color: #00004d;
+			  margin-right: 0.5%
+			  margin-left: 0.5%
+			  text-align: center;
+			  padding: 10px 30px;
+			  margin: 5px 5px;
+			  text-decoration: none;
+			  background-color: #FFFFE0;
+			  font-family: Verdana;
+			  font-size: 16px;
+			  
+			}
+			
+			textarea {
+			  display: block;
+			  color: #00004d;
+			  margin-right: 0.5%
+			  margin-left: 0.5%
+			  text-align: center;
+			  padding: 10px 30px;
+			  border: none;
+			  margin: 5px 5px;
+			  text-decoration: none;
+			  background-color: #FFFFE0;
+			  font-family: Verdana;
+			  font-size: 16px;
+			}
+			
+		</style>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<meta name="google-signin-client_id" content="454142833917-s9pug58fode80ufgl6gq5f16k0kveobr.apps.googleusercontent.com">
+		<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+
+	</head>
+	<body>
+		<ul><a href="#" onclick="signOut();">Sign out</a>
+		<div class="g-signin2" data-onsuccess="onSignIn"></div></ul>
+		
+		<h2>MELBOURNE DELIGHT FOOD SERVICES</h2>
+		
+		<script>
+		var id, name;
+		function onSignIn(googleUser) {
+			  var profile = googleUser.getBasicProfile();
+			  id = profile.getId();
+			  name = profile.getName();
+			  document.getElementById("loginName").innerHTML = "Hi "+name+"! What would you like to eat today?";
+			  document.getElementById("loginName").style.display = "block";
+			  document.getElementById("menu").style.display = "block";
+			  
+			  loadData();
+			  
+			}
+			
+		function signOut() {
+			var auth2 = gapi.auth2.getAuthInstance();
+			auth2.signOut().then(function () {
+			  console.log('User signed out.');
+			});
+			document.getElementById("name").style.display = "none";
+			document.getElementById("menu").style.display = "none";
+			document.getElementById("loginName").innerHTML = "Login to order some yummy food!";
+			  
+		}
+		
+		
+		AWS.config.update({
+		  region: "ap-southeast-2",
+		  endpoint: "https://dynamodb.ap-southeast-2.amazonaws.com",
+		  accessKeyId: "AKIAJFBFLQYK5FLCJLFQ",
+		  secretAccessKey: "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"
+		});
+
+		
+		var docClient = new AWS.DynamoDB.DocumentClient();
+		var s3 = new AWS.S3();
+		
+		
+		function loadData(){
+		
+			var params = {
+				TableName: 'foodInformation'
+			};
+			
+			docClient.scan(params, onScan);
+
+			function onScan(err, data) {
+				
+				if (err) {
+					console.log( "Unable to scan the table: " + "\n" + JSON.stringify(err, undefined, 2));
+				} else {
+					var fooddata = data;
+					console.log (fooddata)
+					
+					for (var key in data) {
+					   if (data.hasOwnProperty(key)) {
+						  var obj = data[key];
+						  for (var prop in obj) {
+								document.getElementById('foodlist').innerHTML += ('<li><img src='+obj[prop].imageurl+' alt="food image" style="width:170px;height:160px;border:0;"></li><li><p>'
+																	+obj[prop].name+'</p><p>'
+																	+obj[prop].description+'</p><p>'
+																	+obj[prop].cost+'</p><p>'
+																	+obj[prop].location+'</p>'+
+																	'<button id = "orderButton" obj_data=' +JSON.stringify(obj[prop]).replace(/ /g,"_")+ ' onclick="myFunction(this);">Add to Cart</button></li>');
+
+
+							}
+						  }
+					   }
+					}
+					
+			params.ExclusiveStartKey = data.LastEvaluatedKey;
+			}
+		}
+		 
+		function myFunction(obj){
+			//localStorage.clear();
+			
+			data = obj.getAttribute("obj_data");
+
+			data = data.replace(/_/g," ")
+
+			data = JSON.parse(data)
+
+			console.log(data)
+
+			var selectedMenu = JSON.parse( localStorage.getItem('food') ) || {};
+
+			selectedMenu[ Date.now() ] = data;
+
+			localStorage.setItem('food', JSON.stringify(selectedMenu));
+
+			var de = JSON.parse(window.localStorage.getItem("food"));
+
+			console.log(de);
+			
+			var url= "/cart"; 
+
+			window.location = url; 
+			
+		}
+		
+		</script>
+		<div id = "name" style = "display: none"></div>
+		<div><textarea id = "loginName" style="width:500px; height:20px">Login to order some yummy food!</textarea></div>
+		
+		<div id="menu" style="display: none">
+			  <ul id = "foodlist">
+			  </ul>
+		</div>
+	</body>
+</html>
+
+
