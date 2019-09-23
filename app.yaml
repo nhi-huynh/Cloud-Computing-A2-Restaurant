@@ -1,0 +1,15 @@
+runtime: nodejs10
+api_version: 1
+instance_class: F2
+
+handlers:
+- url: /
+  script: login.php
+- url: /register
+  script: register.php
+- url: /main
+  script: main.php
+- url: /login
+  script: login.php
+- url: /logout
+  script: logout.php
