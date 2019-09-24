@@ -1,14 +1,43 @@
 <!DOCTYPE html>
 <html>
 	<head>
+	<meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 		<title>menu</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
 		<style>
+		
+			.container{
+				padding: 10%;
+				text-align: center;
+		   } 
+			
 			h1{
 				color: #1a3300;
 				text-align: center;
 				font-family: Verdana;
 				font-size: 35px;
 				text-shadow: 2px 2px #ff0000;
+				font-style: oblique;
+			}
+			
+			h3{
+				color: #1a3300;
+				text-align: center;
+				font-family: Verdana;
+				font-size: 20px;
+				font-style: oblique;
+			}
+			
+			.messageText {
+				color: #1a3300;
+				text-align: center;
+				font-family: Verdana;
+				font-size: 20px;
 				font-style: oblique;
 			}
 		
@@ -23,59 +52,334 @@
 			  text-decoration: none;
 			  background-color: #FFFFE0;
 			  font-family: Verdana;
-			  font-size: 16px;
-			  
+			  font-size: 16px;  
 			}
 			
+			img:hover {
+				box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+			}
+			
+			button{
+			  background-color: #4CAF50;
+			  border: none;
+			  color: white;
+			  padding: 10px 10px;
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-family: Verdana;
+			  font-size: 13px;
+			}
+			
+			button:hover {
+			  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+			}
+			
+			.payButton {
+			  background-color: #4CAF50;
+			  border: none;
+			  color: white;
+			  padding: 10px 60px;
+			  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-family: Verdana;
+			  font-size: 18px;
+			  display: flex; 
+			  margin: 0 auto;
+			}
+			
+			.backButton {
+			  background-color: #4CAF50;
+			  border: none;
+			  color: white;
+			  padding: 10px 60px;
+			  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-family: Verdana;
+			  font-size: 18px;
+			  display: flex; 
+			  margin: 0 auto;
+			}
+			
+			 /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 60%;
+		width: 40%;
+		align: center;
+      }
+	  
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+	  
+      #description {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      #infowindow-content .title {
+        font-weight: bold;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+
+      #map #infowindow-content {
+        display: inline;
+      }
+
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
 		</style>
+		<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUX1QaHPDB3xtuHHSF6W1dNPkqPHEh45w&amp;libraries=places"></script>
+		
 	</head>
 	<body>
-	<script >//type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuGRQ6WsQHsuilAIKXLMlFhvl9NS7qy5k&libraries=places">
-	</script>
 	
 	<script>
 	
-	document.addEventListener("DOMContentLoaded", function(event) { 
-	var data = JSON.parse(localStorage.getItem("food"));
-	console.log(data);
-	for (var key in data) {
-					   if (data.hasOwnProperty(key)) {
-								document.getElementById('orderedMenu').innerHTML += ('<li><img src='+data[key].imageurl+' alt="food image" style="width:150px;height:140px;border:0;"></li><li><p>'
-																						+data[key].name+'</p><p>'
-																						+data[key].cost+'</p><p>'
-																						+data[key].location+'</p>'+
-																						'<button id = "CancelButton" obj_data=' +JSON.stringify(data[key]).replace(/ /g,"_")+ ' onclick="removeFunction(this);">Remove</button></li>');
-							 
-						  }
-					   }
-	});
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
-	function removeFunction(obj){
-			data = obj.getAttribute("obj_data");
+	/////Google map and Autofill address related functionalities
+	
+	
+	google.maps.event.addDomListener(window, 'load', initialize);
+		function initialize() {
+		  var input = document.getElementById('autocomplete_search');
+		  var autocomplete = new google.maps.places.Autocomplete(input);
+		  autocomplete.addListener('place_changed', function () {
+		  var place = autocomplete.getPlace();
+		  console.log(place);
+		  // place variable will have all the information you are looking for.
+		  $('#lat').val(place.geometry['location'].lat());
+		  $('#long').val(place.geometry['location'].lng());
+		});
+	  }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	////Order related functionalities
+		document.addEventListener("DOMContentLoaded", function(event) { 
+		var data = JSON.parse(localStorage.getItem("food"));
+		console.log(data);
+		for (var key in data) {
+						   if (data.hasOwnProperty(key)) {
+									document.getElementById('orderedMenu').innerHTML += ('<li><img src='+data[key].imageurl+' alt="food image" style="width:180px;height:170px;border:0;"></li><li><p>'
+																							+data[key].name+'</p><p>'
+																							+data[key].cost+'</p><p>'
+																							+data[key].location+'</p><p>'+
+																							+data[key].quantity+'</p>'+
+																							'<button id = "addButton" obj_data=' +JSON.stringify(data[key]).replace(/ /g,"_")+ ' onclick="addFunction(this);">Add More</button>'+'<br><br>'+
+																							'<button id = "CancelButton" obj_data=' +JSON.stringify(data[key]).replace(/ /g,"_")+ ' onclick="removeFunction(this);">Remove</button></li><br><br>');
 
-			data = data.replace(/_/g," ")
+								 
+						}
+				}
+		});
+	
+	
+		function removeFunction(obj){
+				data = obj.getAttribute("obj_data");
 
-			data = JSON.parse(data)
-			console.log(data);
-			console.log(data.name);
-			//data = obj.getAttribute("imageurl": obj.imageurl);
-			//window.localStorage.removeItem(data.name);
+				data = data.replace(/_/g," ")
 
+				data = JSON.parse(data)
+				
+				var cartData = JSON.parse(localStorage.getItem("food"));
+				
+				for (var key in cartData) {
+								   if (cartData.hasOwnProperty(key)) {
+										 if(cartData[key].name == data.name && cartData[key].quantity == 1)
+										 {
+											delete cartData[key];
+										 }else if(cartData[key].name == data.name && cartData[key].quantity > 1) {
+											cartData[key].quantity--;
+										 }
+									  }
+								   }
+				localStorage.setItem('food', JSON.stringify(cartData));
+				location.reload();
+		}
+		
+		
+		function addFunction(obj){
+				data = obj.getAttribute("obj_data");
 
-	}
+				data = data.replace(/_/g," ")
+
+				data = JSON.parse(data)
+				
+				var cartData = JSON.parse(localStorage.getItem("food"));
+				
+				for (var key in cartData) {
+								   if (cartData.hasOwnProperty(key)) {
+										 if(cartData[key].name == data.name)
+										 {
+											cartData[key].quantity++;
+										 }
+									  }
+								   }
+				localStorage.setItem('food', JSON.stringify(cartData));
+				location.reload();
+		}
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		/// order storing and payment related functionalities
+		
+		function payFunction(){
+		
+		//USE GOOGLE PAY HERE
+		
+		///Following code should be excuted on sucessful payment
+			AWS.config.update({
+			  region: "ap-southeast-2",
+			  endpoint: "https://dynamodb.ap-southeast-2.amazonaws.com",
+			  accessKeyId: "AKIAJFBFLQYK5FLCJLFQ",
+			  secretAccessKey: "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"
+			});
+
 			
+			
+			var docClient = new AWS.DynamoDB.DocumentClient();
+			var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+			var index = Date.now()
+			var cartData = JSON.parse(localStorage.getItem("food"));
+				
+				for (var key in cartData) {
+					   if (cartData.hasOwnProperty(key)) {
+							 var params = {
+								  TableName: 'CustomerOrderTable',
+								  Item: {
+									'orderID' : { N: index.toString() },
+									'customer' : { S: cartData[key].cartHolder },
+									'foodName' : {S: cartData[key].name },
+									'quantity' : {N: cartData[key].quantity.toString() },
+									'cost' : {N: cartData[key].cost.toString() },
+									'paid' : {N: (cartData[key].quantity*cartData[key].cost).toString() },
+									//'deliveryLocation' : {S: place.name}
+								  }
+								};
+
+								// Call DynamoDB to add the item to the table
+								ddb.putItem(params, function(err, data) {
+								  if (err) {
+									console.log("Error", err);
+								  } else {
+									localStorage.clear();
+									document.getElementById("messageText").innerHTML = "Order Successful! your Food is on the way";
+									
+									console.log("Success", data);
+								  }
+								});
+						  } 
+						  index++;
+				}
+			
+		}
+		
+		function backScreenFunction(){
+			var url= "/"; 
+
+			window.location = url; 
+		}
+		
 	
 	</script>
+	
+	<br>
 	<h1>Your Cart</h1>
-	<div>
-	<p>Enter Your Delivery Address</P>
-	<form>Address <input name = "addTad">
-	</form>
+	
+	<h3 >Enter your delivery address to finalize payment</h3><br>
+	<p id = "messageText"></p><br>
+	<button class = "payButton" onclick="payFunction()">Pay</button><br>
+	<button class = "backButton" onclick="backScreenFunction()">Back to Menu</button>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div id="custom-search-input">
+					<div class="input-group">
+						<input id="autocomplete_search" name="autocomplete_search" type="text" class="form-control" placeholder="Enter delivery address here.." />
+						<input type="hidden" name="lat">
+						<input type="hidden" name="long">
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	
-	<div >
 	<ul id = "orderedMenu" ></ul>
-	</div>
+	 
 	</body>
 </html>

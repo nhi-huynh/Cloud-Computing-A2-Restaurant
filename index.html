@@ -87,7 +87,7 @@
 			
 		</style>
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
-		<meta name="google-signin-client_id" content="454142833917-s9pug58fode80ufgl6gq5f16k0kveobr.apps.googleusercontent.com">
+		<meta name="google-signin-client_id" content="625365377624-qs3fqrd1njgt359tu46lpkhnv8fodnng.apps.googleusercontent.com">
 		<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
 
 	</head>
@@ -98,6 +98,15 @@
 		<h2>MELBOURNE DELIGHT FOOD SERVICES</h2>
 		
 		<script>
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		
+		//// OAUth for user gmail account varification
+		
+		
+		
 		var id, name;
 		function onSignIn(googleUser) {
 			  var profile = googleUser.getBasicProfile();
@@ -106,7 +115,7 @@
 			  document.getElementById("loginName").innerHTML = "Hi "+name+"! What would you like to eat today?";
 			  document.getElementById("loginName").style.display = "block";
 			  document.getElementById("menu").style.display = "block";
-			  
+			  updateCustomerTable();
 			  loadData();
 			  
 			}
@@ -122,6 +131,12 @@
 			  
 		}
 		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		////////////////////// to load data from AWS dynamoDB and S3
+		
+		
 		
 		AWS.config.update({
 		  region: "ap-southeast-2",
@@ -134,6 +149,30 @@
 		var docClient = new AWS.DynamoDB.DocumentClient();
 		var s3 = new AWS.S3();
 		
+		
+		function updateCustomerTable(){
+			var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+			var index = Date.now()
+			console.log(index);
+			var params = {
+			  TableName: 'CustomerVisitTable',
+			  Item: {
+				'id' : { N: index.toString() },
+				'gmailId' : {N: id},
+				'CustomerName' : {S: name}
+			  }
+			};
+
+			// Call DynamoDB to add the item to the table
+			ddb.putItem(params, function(err, data) {
+			  if (err) {
+				console.log("Error", err);
+			  } else {
+				console.log("Success", data);
+			  }
+			});
+		
+		}
 		
 		function loadData(){
 		
@@ -155,7 +194,7 @@
 					   if (data.hasOwnProperty(key)) {
 						  var obj = data[key];
 						  for (var prop in obj) {
-								document.getElementById('foodlist').innerHTML += ('<li><img src='+obj[prop].imageurl+' alt="food image" style="width:170px;height:160px;border:0;"></li><li><p>'
+								document.getElementById('foodlist').innerHTML += ('<li><img src='+obj[prop].imageurl+' alt="food image" style="width:170px;height:160px;border:0;margin-left: auto;margin-right: auto;"></li><li><p>'
 																	+obj[prop].name+'</p><p>'
 																	+obj[prop].description+'</p><p>'
 																	+obj[prop].cost+'</p><p>'
@@ -171,6 +210,14 @@
 			params.ExclusiveStartKey = data.LastEvaluatedKey;
 			}
 		}
+		
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		/////// store data to localStorage to use that to send to /cart page
+		
+		
 		 
 		function myFunction(obj){
 			//localStorage.clear();
@@ -180,6 +227,8 @@
 			data = data.replace(/_/g," ")
 
 			data = JSON.parse(data)
+			data.quantity = 1;
+			data.cartHolder = name;
 
 			console.log(data)
 
