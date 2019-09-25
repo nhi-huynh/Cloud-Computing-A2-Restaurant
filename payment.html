@@ -1,24 +1,155 @@
+<!DOCTYPE html>
+<html>
+  
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Set title -->
+        <title>Restaurant Ordering App</title>
+        
+        <!-- Latest compiled and minified CSS Bootstrap-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        
+
+        <!-- Enable Google OAuth API for sign in/out -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="235875188943-saga1lj53l7shdd6tpcebiamaqcf69nr.apps.googleusercontent.com">
+        
+        <!-- Enable AWS Cloud Services API -->
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+    </head>
+  
+    <body onload="fetchCart()">
+        <div class="container">
+        
+        <button onclick="signOut();" class="btn btn-light">Sign out</button>
+
+        <div id = "requestLogin" class="alert alert-warning" role="alert">
+            
+            <strong>
+                Sign in to order some yummy food!
+            </strong>
+            <div class="g-signin2" data-onsuccess="onSignIn" aria-label="Sign in with Google"><span aria-hidden="true">&times;</span></div>
+            
+        </div>
+
+        <h1>MELBOURNE DELIGHT FOOD SERVICES <small>Good food at your fingertips</small></h1>
+        <p><br/></p>
+
+        <!-- List all food items -->
+
+        <div class="col-sm-3"  id="cartList"></div>
+
+        <div class="col-sm-2"> </div>
+
+        <!-- List all cart items -->
+        <div class="col-sm-7" id="paymentForm">
+            <div class="jumbotron">
+                <h3>Delivery information</h3>
+
+                <form id="paymentInputForm">
+
+                    <div class="form-group">
+                    <label for="addressInput">Street name</label>
+                    <input type="text" class="form-control" id="addressInput" placeholder="542 King Street">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cityInput">City</label>
+                        <input type="text" class="form-control" id="cityInput" placeholder="Carlton">
+                    </div>
+
+                    <div class="form-group">
+                            <label for="stateInput">State</label>
+                            <input type="text" class="form-control" id="stateInput" placeholder="VIC">
+                        </div>
+                    <div class="form-group">
+                        <label for="zipCode">Zip code</label>
+                        <input type="text" class="form-control" id="zipCode" placeholder="3053">
+                    </div>
+
+                    <div class="form-group">
+                    <label for="shippingMethodInput">Delivery method</label>
+                    <select id="shippingMethodInput" class="form-control">
+                        <option value="Collect">Collect at the restaurant</option>
+                        <option value="Delivery">Deliver to your address</option>
+                        <option value="Dine-in">Dine-in at the restaurant</option>
+                    </select>
+                    </div>
+
+                    <!-- <div class="form-group">
+                            <label for="deliveryAddressInput">Delivery address</label>
+                            <input type="text" class="form-control" id="issueDescInput" placeholder="Your delivery address">
+                        </div>
+
+                    <div class="form-group">
+                        <label for="fullNameInput">Full Name</label>
+                        <input type="text" class="form-control" id="fullNameInput" placeholder="Your fullname">
+                    </div> -->
+
+                    <!-- <label for="cname">Name on Card</label>
+                    <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+                    <label for="ccnum">Credit card number</label>
+                    <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                    <label for="expmonth">Exp Month</label>
+                    <input type="text" id="expmonth" name="expmonth" placeholder="September">
+    
+                    <div class="row">
+                    <div class="col-50">
+                        <label for="expyear">Exp Year</label>
+                        <input type="text" id="expyear" name="expyear" placeholder="2018">
+                    </div>
+                    <div class="col-50">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="352">
+                    </div> -->
+                    
+                    <!-- <button type="submit" class="btn btn-primary" style="float: right;">Pay using this card</button> -->
+                    
+                    <!-- Add the Google Pay button  -->
+        <script async
+        src="https://pay.google.com/gp/p/js/pay.js"
+        onload="onGooglePayLoaded()">
+        </script>
+                </form>
+                
+            </div>
+            
+
+                
+
+        </div>
+
+        
+        
+
+        
+        
+        </div>
+
+        <!-- Define components in the footer -->
+        <div class="col-lg-12">
+                <div class="footer">
+                    <p>&copy <a href="http://google.com" target="_blank">Nhi Huynh and Radhika Zawar 2019</a></p>
+                    </div>
+            </div>
+        <!-- Enable random number generator using chance.js -->
+        <script src="chance.js"></script>
+        
+        <!-- Enable JQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        
+        <!-- Include the scripts -->
+        <script src="payment.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>
 
 
-    <div class="jumbotron">
-        <h3>Add New Issue:</h3>
-        <form id="issueInputForm">
-          <div class="form-group">
-            <label for="issueDescInput">Description</label>
-            <input type="text" class="form-control" id="issueDescInput" placeholder="Describe the issue ...">
-          </div>
-          <div class="form-group">
-            <label for="issueSeverityInput">Severity</label>
-            <select id="issueSeverityInput" class="form-control">
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="issueAssignedToInput">Assigned To</label>
-            <input type="text" class="form-control" id="issueAssignedToInput" placeholder="Enter responsible ...">
-          </div>
-          <button type="submit" class="btn btn-primary">Add</button>
-        </form>
-      </div>
+    

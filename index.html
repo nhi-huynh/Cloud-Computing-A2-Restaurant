@@ -26,29 +26,34 @@
       <button onclick="signOut();" class="btn btn-light">Sign out</button>
 
       <div id = "requestLogin" class="alert alert-warning" role="alert">
-        <strong>
-          Sign in to order some yummy food!
+
+          <strong>
+            Sign in to order some yummy food!
+          </strong>
           <div class="g-signin2" data-onsuccess="onSignIn" aria-label="Sign in with Google"><span aria-hidden="true">&times;</span></div>
-        </strong>
+        
       </div>
 
       <h1>MELBOURNE DELIGHT FOOD SERVICES <small>Order anywhere, anytime</small></h1>
       <p><br/></p>
 
       <!-- List all food items -->
-      <div class="col-lg-12">
-        <div id="dishesList"></div>
-      </div>
+      <div class="col-sm-7"  id="dishesList"></div>
+
+      <!-- Two blank column in the middle for spacing -->
+      <div class="col-sm-2"> </div>
 
       <!-- List all cart items -->
-      <div class="col-lg-12">
-          <div id="cartList"></div>
-      </div>
+      <div class="col-sm-3" id="cartList" style="background-color:azure;"></div>
+
 
       <!-- Define components in the footer -->
-      <div class="footer">
-        <p>&copy <a href="http://google.com" target="_blank">Nhi Huynh and Radhika Zawar 2019</a></p>
+      <div class="col-lg-12">
+          <div class="footer">
+              <p>&copy <a href="http://google.com" target="_blank">Nhi Huynh and Radhika Zawar 2019</a></p>
+          </div>
       </div>
+      
     </div>
 
     <!-- Enable random number generator using chance.js -->

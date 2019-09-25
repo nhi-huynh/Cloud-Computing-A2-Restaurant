@@ -1,9 +1,10 @@
 runtime: nodejs10
-api_version: 1
 instance_class: F2
 
 handlers:
 - url: /
-  script: index.html
+  script: auto
+- url: /payment
+  script: auto
 - url: /cart
-  script: cart.html
+  script: auto
