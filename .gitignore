@@ -1,3 +1,6 @@
 .firebaserc
 database.rules.json
 firebase.json
+sendgrid.js
+aws-config.js
+

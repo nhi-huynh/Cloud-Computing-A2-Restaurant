@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Set title -->
+        <title>Restaurant Ordering App</title>
+        
+        <!-- Latest compiled and minified CSS Bootstrap-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Enable JQuery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        
+        <!-- Latest compiled and minified JavaScript Bootstrap -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <!-- Enable Google OAuth API for sign in/out -->
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+        <meta name="google-signin-client_id" content="436284681417-gnns65dasicsl1719kbqacgnt1vd57da.apps.googleusercontent.com">
+
+        <!-- Enable AWS Cloud Services API -->
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+
+        <!-- Enable Google Places API-->
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUX1QaHPDB3xtuHHSF6W1dNPkqPHEh45w&amp;libraries=places"></script>
+
+        
+        
+    </head>
+  
+    <body onload="sendConfirmationEmail()">
+    <!-- <body> -->
+        <div class="container">
+        
+        <button onclick="signOut();" class="btn btn-light">Sign out</button>
+
+        <div class="alert alert-success" role="alert">
+            <div id="payBanner"></div>
+        </div>
+
+        <h1>MELBOURNE DELIGHT FOOD SERVICES <small>Good food at your fingertips</small></h1>
+        <p><br/></p>
+
+        
+
+        <div class="jumbotron text-center">
+            <!-- Include the script for index.html -->
+            <script src="/scripts/main.js"  type="text/javascript" ></script>
+        
+            <h1 class="display-3">Thank you for ordering!</h1>
+        
+            <p class="lead">We have sent an order confirmation to your email.</p>
+            <hr>
+            <p>
+                <!-- Having trouble? <a href="">Contact us</a> -->
+            </p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="/menu" role="button">Order more</a>
+                <button onclick="signOut();" class="btn btn-dark btn-lg">Sign out</button>
+            </p>
+        </div>
+
+        <!-- Show receipt - list all items previously bought -->
+        <!-- <div class="col-lg-12"  id="cartList"></div> -->
+
+        <!-- Include the script for sign in/out, sending email to user -->
+        <script src="/scripts/main.js"></script>
+        <script src="/scripts/thankyou.js"></script>
+
+        <!-- Define components in the footer -->
+        <div class="col-lg-12">
+            <div class="footer">
+                <p>&copy <a href="http://google.com" target="_blank">Nhi Huynh and Radhika Zawar 2019</a></p>
+            </div>
+        </div>
+    </body>
+</html>
+
+
+    
+
+

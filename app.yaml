@@ -1,10 +1,37 @@
-runtime: nodejs10
-instance_class: F2
+runtime: python27
+api_version: 1
+threadsafe: true
 
 handlers:
+- url: /scripts
+  static_dir: scripts
+
 - url: /
-  script: auto
+  static_files: index.html
+  upload: index.html
+  # script: /scripts/main.js
+
+
+- url: /menu
+  static_files: menu.html
+  upload: menu.html
+  # script: /scripts/menu.js
+
+
 - url: /payment
-  script: auto
-- url: /cart
-  script: auto
+  static_files: payment.html
+  upload: payment.html
+  # script: /scripts/payment.js
+
+
+- url: /thankyou
+  static_files: thankyou.html
+  upload: thankyou.html
+  # script: /scripts/thankyou.js
+
+
+- url: /receipt
+  static_files: receipt.html
+  upload: receipt.html
+  # script: /scripts/cart.js
+
