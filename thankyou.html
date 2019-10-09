@@ -19,7 +19,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
         <!-- Enable Google OAuth API for sign in/out -->
-        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+        
         <meta name="google-signin-client_id" content="436284681417-gnns65dasicsl1719kbqacgnt1vd57da.apps.googleusercontent.com">
 
         <!-- Enable AWS Cloud Services API -->
@@ -28,6 +28,9 @@
         <!-- Enable Google Places API-->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUX1QaHPDB3xtuHHSF6W1dNPkqPHEh45w&amp;libraries=places"></script>
 
+        <!-- Include the script for sign in/out, sending email to user -->
+        <script src="/scripts/main.js"></script>
+        <script src="/scripts/thankyou.js"></script>
         
         
     </head>
@@ -37,7 +40,8 @@
         <div class="container">
         
         <button onclick="signOut();" class="btn btn-light">Sign out</button>
-
+        <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+            
         <div class="alert alert-success" role="alert">
             <div id="payBanner"></div>
         </div>
@@ -67,9 +71,7 @@
         <!-- Show receipt - list all items previously bought -->
         <!-- <div class="col-lg-12"  id="cartList"></div> -->
 
-        <!-- Include the script for sign in/out, sending email to user -->
-        <script src="/scripts/main.js"></script>
-        <script src="/scripts/thankyou.js"></script>
+        
 
         <!-- Define components in the footer -->
         <div class="col-lg-12">

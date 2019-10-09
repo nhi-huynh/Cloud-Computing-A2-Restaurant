@@ -356,23 +356,25 @@ function processPayment(paymentData) {
 
 //Write order data to AWS
 function writeOrderAWS(){
+  
   AWS.config.update(aws_dynamo_order_config);
 
   var docClient = new AWS.DynamoDB.DocumentClient();
   var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
-  var index = Date.now()
-  var cartData = JSON.parse(localStorage.getItem("food"));
-    
+  // var index = Date.now()
+  var cartData = JSON.parse(localStorage.getItem("cart_data"));
+  
+  
   for (var key in cartData) {
     if (cartData.hasOwnProperty(key)) {
       var params = {
         TableName: 'CustomerOrderTable',
         Item: {
-        'orderID' : { N: index.toString() },
-        'customer' : { S: cartData[key].cartHolder },
-        'foodName' : {S: cartData[key].name },
+        'orderID' : { N: Date.now().toString() },
+        'customer' : { S: cartData[key].user_email },
+        'foodName' : {S: cartData[key].dishes },
         'quantity' : {N: cartData[key].quantity.toString() },
-        'cost' : {N: cartData[key].cost.toString() },
+        'cost' : {N: cartData[key].total_cost.toString() },
         'paid' : {N: (cartData[key].quantity*cartData[key].cost).toString() },
         'deliveryLocation' : {S: delivery_place['formatted_address']}
         }
@@ -390,7 +392,7 @@ function writeOrderAWS(){
         }
       });
     } 
-    index++;
+    // index++;
   }
 }
 
@@ -414,6 +416,9 @@ function getTotalPrice(){
 // using SMTPJS https://www.smtpjs.com/ to send email
 // Server setup using 
 function sendEmail(){  	//(orderSummaryHtml){
+
+  
+
   // const sgMail = require('@sendgrid/mail');
   // sgMail.setApiKey(SENDGRID_API_KEY);
   // const msg = {
@@ -471,13 +476,13 @@ function sendEmail(){  	//(orderSummaryHtml){
   //   message => alert(message)
   // );
 
-  Email.send({
-    SecureToken : 'cf164dbe-cf77-491a-a04b-227566595730',    //"7ec903b3-67ac-4f64-83ce-0dd7a7416ae5",
-    To : "cloudcomputingrmit2019@gmail.com", //'uyennhihuynhluu@gmail.com',
-    From : "cloudcomputingrmit2019@gmail.com",
-    Subject : "This is the subject",
-    Body : "And this is the body"
-}).then(
-  message => alert(message)
-);
+  // Email.send({
+  //   SecureToken : 'cf164dbe-cf77-491a-a04b-227566595730',    //"7ec903b3-67ac-4f64-83ce-0dd7a7416ae5",
+  //   To : "cloudcomputingrmit2019@gmail.com", //'uyennhihuynhluu@gmail.com',
+  //   From : "cloudcomputingrmit2019@gmail.com",
+  //   Subject : "This is the subject",
+  //   Body : "And this is the body"
+  // }).then(
+  //   message => alert(message)
+  // );
 }
