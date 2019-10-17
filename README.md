@@ -1,25 +1,25 @@
 # Author
-Nhi Huynh
-Radhika Zawar
+Nhi Huynh.
+Radhika Zawar.
 
 # About this web application
 Written for Cloud Computing Assignment 2.
-A website that allows users to order food from multiple restaurants
+A website that allows users to order food from multiple restaurants.
 Deployed in Google App Engine https://cloud-computing-a2-food.appspot.com/ 
 
 # Features
-Log in and sign out using Google accounts
-Order dishes from multiple restaurants
-Pay online using Google Pay
-Receive an order summary through email 
+Log in and sign out using Google accounts.
+Order dishes from multiple restaurants.
+Pay online using Google Pay.
+Receive an order summary through email. 
 
 # Technology stack
-Javascript
-HTML
-CSS
-Bootstrap
-Google Cloud Services 
-Amazon Web Services
+Javascript.
+HTML.
+CSS.
+Bootstrap.
+Google Cloud Services.
+Amazon Web Services.
 
 # How to run our app - a developer’s manual
 
