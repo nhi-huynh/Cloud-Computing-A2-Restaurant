@@ -1,6 +1,8 @@
-
 ///Google map and Autofill address related functionalities
 var delivery_place;
+
+// Order summary in html
+var orderSummaryHtml;
 
 //Read cart data to alert successful log in
 var cart_data = JSON.parse(localStorage.getItem('cart_data'));
@@ -45,7 +47,7 @@ function saveDeliveryAddress(delivery_address){
 
 // Load order summary from cart (stored in localStorage)
 function fetchOrderSummary() {
-  
+  orderSummaryHtml = "";  
 
   //Read cart_data from localStorage
   var cart_data = JSON.parse(localStorage.getItem('cart_data'));
@@ -79,22 +81,30 @@ function fetchOrderSummary() {
                             + cost + '</b><p>'
                             + location+'</p>'
     );
+
+    orderSummaryHtml += ('<img src=' + imageURL +' alt="food image" style="width:170px;height:160px;border:0;"><h5><strong>'
+                            + dish_name + '</strong></h5><b>$'
+                            + cost + '</b><p>'
+                            + location+'</p>'
+    );
   } 
 
   if(ordered_dishes.length != 0){
     orderSummary.innerHTML += '<h3>Total cost: <b>$' + cart_data["total_cost"].toFixed(2) + ' </b></h3><p> </p>';
-    // orderSummary.innerHTML += '<h3>Paid: <b>$' + cart_data["total_cost"].toFixed(2) + ' </b></h3>';
+    orderSummaryHtml += '<h3>Paid: <b>$' + cart_data["total_cost"].toFixed(2) + ' </b></h3>';
   }
 
   if(cart_data["delivery_address"] != ""){
     orderSummary.innerHTML += '<h3>Delivery address</h3><p>' 
-                         + cart_data["delivery_address"] + '</p><p> </p>';
+                          + cart_data["delivery_address"] + '</p><p> </p>';
+    orderSummaryHtml += '<h3>Delivery address</h3><p>' 
+                          + cart_data["delivery_address"] + '</p><p> </p>';
   }
   else{
-    orderSummary.innerHTML += "";
+    orderSummary.innerHTML += "<p> </p>";
   }
 
-  return orderSummary.innerHTML;
+  orderSummary.innerHTML += '<a class="btn btn-primary btn-md" href="/menu" role="button">Back to menu</a>';
 }
 
 // The rest of the code is for Google Pay API, taken from https://developers.google.com/pay/api/web/guides/tutorial
@@ -336,12 +346,11 @@ function processPayment(paymentData) {
   paymentToken = paymentData.paymentMethodData.tokenizationData.token;
 
   // If order info is written to AWS Dynamo sucessfully
-  if (writeOrderAWS) {
+  if (writeOrderAWS()) {
       // document.getElementById("messageText").innerHTML = "Order Successful! your Food is on the way";
-
-      // Clear past order in localStorage, prepare for a new order
-      clearUserOrder();
-
+      // Send order summary email to user_email
+      sendEmail();
+      
       // Redirect the user to the thank you page
       var url= "/thankyou"; 
       window.location = url; 
@@ -349,52 +358,86 @@ function processPayment(paymentData) {
       console.log("Cart data after payment")
       console.log(localStorage.getItem("cart_data"));
 
-      // Send order summary email to user_email
-      sendEmail(fetchOrderSummary());
+      
     }
 }
 
 //Write order data to AWS
 function writeOrderAWS(){
-  
   AWS.config.update(aws_dynamo_order_config);
 
   var docClient = new AWS.DynamoDB.DocumentClient();
   var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
   // var index = Date.now()
-  var cartData = JSON.parse(localStorage.getItem("cart_data"));
-  
-  
-  for (var key in cartData) {
-    if (cartData.hasOwnProperty(key)) {
-      var params = {
-        TableName: 'CustomerOrderTable',
-        Item: {
-        'orderID' : { N: Date.now().toString() },
-        'customer' : { S: cartData[key].user_email },
-        'foodName' : {S: cartData[key].dishes },
-        'quantity' : {N: cartData[key].quantity.toString() },
-        'cost' : {N: cartData[key].total_cost.toString() },
-        'paid' : {N: (cartData[key].quantity*cartData[key].cost).toString() },
-        'deliveryLocation' : {S: delivery_place['formatted_address']}
-        }
-      };
+  var cart_data = JSON.parse(localStorage.getItem("cart_data"));
+  var default_quantity = 1;
 
-      // Call DynamoDB to add the item to the table
-      ddb.putItem(params, function(err, data) {
-        if (err) {
-          console.log("Error: ", err);
-          return false;
-        } 
-        else {
-          console.log("Success", data);
-          return true;
-        }
-      });
-    } 
-    // index++;
+  for (i = 0; i < cart_data.dishes.length; i++){
+    var dish = cart_data.dishes[i];
+    var params = {
+      TableName: 'CustomerOrderTable',
+      Item: {
+      'orderID' : { N: Date.now().toString() },
+      'cost' : {N: dish.cost.toString() },
+      'customer' : { S: cart_data.user_name },
+      'deliveryLocation' : {S: cart_data.delivery_address},
+      'foodName' : {S: dish.name },
+      'paid' : {N: dish.cost.toString() },
+      'quantity' : {N: default_quantity.toString() },
+      }
+    };
+
+    console.log("To be written");
+    console.log(params);
+
+    // Call DynamoDB to add the item to the table
+    ddb.putItem(params, function(err, data) {
+      if (err) {
+        console.log("Writing order to db - Error: ", err);
+        return false;
+      } 
+      else {
+        console.log("Writing order to db - Success", data);
+      }
+    });
+    
+    // Clear past order in localStorage, prepare for a new order
+    clearUserOrder();
+    return true;
+  // index++;
   }
-}
+} 
+  
+  // for (var key in cart_data) {
+  //   if (cart_data.hasOwnProperty(key)) {
+  //     var params = {
+  //       TableName: 'CustomerOrderTable',
+  //       Item: {
+  //       'orderID' : { N: Date.now().toString() },
+  //       'customer' : { S: cartData[key].user_email },
+  //       'foodName' : {S: cartData[key].dishes },
+  //       'quantity' : {N: cartData[key].quantity.toString() },
+  //       'cost' : {N: cartData[key].total_cost.toString() },
+  //       'paid' : {N: (cartData[key].quantity*cartData[key].cost).toString() },
+  //       'deliveryLocation' : {S: delivery_place['formatted_address']}
+  //       }
+  //     };
+
+  //     // Call DynamoDB to add the item to the table
+  //     ddb.putItem(params, function(err, data) {
+  //       if (err) {
+  //         console.log("Error: ", err);
+  //         return false;
+  //       } 
+  //       else {
+  //         console.log("Success", data);
+  //         return true;
+  //       }
+  //     });
+  //   } 
+  //   // index++;
+  // }
+
 
 // Clear past order in localStorage, prepare for a new order
 function clearUserOrder(){
@@ -417,72 +460,18 @@ function getTotalPrice(){
 // Server setup using 
 function sendEmail(){  	//(orderSummaryHtml){
 
-  
+  Email.send({
+    Host : "smtp.elasticemail.com",
+    Username : "cloudcomputingrmit2019@gmail.com",
+    Password : "6bc8c24d-ffae-432a-8a97-39951d13790f",
+    To : 'uyennhi.huynhluu@gmail.com',  //user_email,
+    From : 'cloudcomputingrmit2019@gmail.com',
+    Subject : 'Order confirmation from Melbourne Food Services',
+    Body : '<h2>Thank you for ordering from us. Your order summary is as below.</h2>' + orderSummaryHtml,
+  }).then(
+    message => alert(message)
+  );
 
-  // const sgMail = require('@sendgrid/mail');
-  // sgMail.setApiKey(SENDGRID_API_KEY);
-  // const msg = {
-  //   to: user_email,
-  //   from: 'cloudcomputingrmit2019@gmail.com', //'test@example.com',
-  //   subject: 'Order confirmation from Melbourne Food Services',
-  //   text: 'Thank you for ordering from us. Your order summary is as below.',
-  //   html: orderSummaryHtml,
-  // };
-  // sgMail.send(msg);
+  console.log("Sent email. Check your spam box.")
 
-  // Email.send({
-  //   Host : "smtp.yourisp.com",
-  //   Username : "username",
-  //   Password : "password",
-  //   To : 'them@website.com',
-  //   From : "you@isp.com",
-  //   Subject : "This is the subject",
-  //   Body : "And this is the body"
-  //   }).then(
-  //     message => alert(message)
-  //   );
-
-  // Email.send({
-  //   Host : "smtp.elasticemail.com",
-  //   Username : "cloudcomputingrmit2019@gmail.com",
-  //   Password : "6bc8c24d-ffae-432a-8a97-39951d13790f",
-  //   To : 'uyennhi.huynhluu@gmail.com',  //user_email,
-  //   From : 'cloudcomputingrmit2019@gmail.com',
-  //   Subject : 'Order confirmation from Melbourne Food Services',
-  //   Body : '<h2>Thank you for ordering from us. Your order summary is as below.</h2>', //+ orderSummaryHtml,
-  // }).then(
-  //   message => alert(message)
-  // );
-
-  // Email.send("cloudcomputingrmit2019@abc.com",
-  //   'uyennhihuynhluu@gmail.com', 
-  //   "This is a subject",
-  //   "this is the body",
-  //   "smtp.elasticemail.com",
-  //   "cloudcomputingrmit2019@gmail.com",
-  //   "6bc8c24d-ffae-432a-8a97-39951d13790f",
-  // );
-
-  console.log("Sending order summary email");
-  // Email.send({
-  //   Host : "smtp.elasticemail.com",
-  //   Username : "cloudcomputingrmit2019@gmail.com",
-  //   Password : "6bc8c24d-ffae-432a-8a97-39951d13790f",
-  //   To : 'uyennhihuynhluu@gmail.com',  //user_email,
-  //   From : 'cloudcomputingrmit2019@gmail.com',
-  //   Subject : 'Order confirmation from Melbourne Food Services',
-  //   Body : '<h2>Thank you for ordering from us. Your order summary is as below.</h2>', //+ orderSummaryHtml,
-  // }).then(
-  //   message => alert(message)
-  // );
-
-  // Email.send({
-  //   SecureToken : 'cf164dbe-cf77-491a-a04b-227566595730',    //"7ec903b3-67ac-4f64-83ce-0dd7a7416ae5",
-  //   To : "cloudcomputingrmit2019@gmail.com", //'uyennhihuynhluu@gmail.com',
-  //   From : "cloudcomputingrmit2019@gmail.com",
-  //   Subject : "This is the subject",
-  //   Body : "And this is the body"
-  // }).then(
-  //   message => alert(message)
-  // );
 }

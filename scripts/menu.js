@@ -50,6 +50,8 @@ function fetchDishes(){
       
   params.ExclusiveStartKey = data.LastEvaluatedKey;
   }
+
+  fetchCart();
 }
 
 

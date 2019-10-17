@@ -45,7 +45,10 @@
     <body onload="fetchOrderSummary()">
         <div class="container">
         
+        <!-- Sign out button -->
         <button onclick="signOut();" class="btn btn-light">Sign out</button>
+
+        <!-- Send email button -->
         <button onclick="sendEmail();" class="btn btn-light">Send email</button>
 
         <div class="alert alert-info" role="alert">
@@ -117,12 +120,14 @@
                 </form>       
             </div>
         </div>
+      
 
         <!-- Add the Google Pay button  -->
         <script async
                 src="https://pay.google.com/gp/p/js/pay.js"
                 onload="onGooglePayLoaded()">
         </script>
+  
 
         </div>
 

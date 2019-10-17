@@ -35,8 +35,8 @@
         
     </head>
   
-    <body onload="sendConfirmationEmail()">
-    <!-- <body> -->
+    <body onload="thankYouBanner()">
+
         <div class="container">
         
         <button onclick="signOut();" class="btn btn-light">Sign out</button>
@@ -60,10 +60,13 @@
             <p class="lead">We have sent an order confirmation to your email.</p>
             <hr>
             <p>
-                <!-- Having trouble? <a href="">Contact us</a> -->
+
             </p>
             <p class="lead">
+                <!-- Order more button -->
                 <a class="btn btn-primary btn-lg" href="/menu" role="button">Order more</a>
+
+                <!-- Sign out button -->
                 <button onclick="signOut();" class="btn btn-dark btn-lg">Sign out</button>
             </p>
         </div>
